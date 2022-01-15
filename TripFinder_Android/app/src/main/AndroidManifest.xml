@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity
+            android:name=".TripInfo_Activity"
+            android:exported="false" />
+        <activity
             android:name=".profile"
             android:exported="false" />
         <activity
