@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EDEDED"
-    tools:context=".statistics">
+    android:background="#ededed"
+    tools:context=".TripInfo_Activity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -45,82 +45,61 @@
         app:title="Trip Finder" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/trip_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-black"
-        android:text="Statistics for"
+        android:text="Ria de Aveiro"
         android:textColor="#000000"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/username"
+        android:textSize="28sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/textView5"
+        app:layout_constraintBottom_toTopOf="@+id/trip_img"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-    <TextView
-        android:id="@+id/username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-black"
-        android:text="Rodrigo Santos"
-        android:textColor="#00BCD4"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/textView"
+    <ImageView
+        android:id="@+id/trip_img"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/usertripsdone"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
-        android:text="Number of trips made:"
-        android:textColor="#000000"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/usertripsdone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintBottom_toTopOf="@+id/textView3"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/trip_name"
+        app:layout_constraintBottom_toTopOf="@+id/trip_dsc"
+        app:srcCompat="@drawable/ic_baseline_account_circle" />
 
     <TextView
-        android:id="@+id/usertripsdone"
+        android:id="@+id/trip_dsc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
-        android:text="1"
-        android:textColor="#00BCD4"
-        android:textSize="16sp"
+        android:text="Description of trip"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/b_startTrip"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/username"
-        app:layout_constraintBottom_toTopOf="@+id/distance"/>
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
-        android:text="Total Distance Traveled (Km):"
-        android:textColor="#000000"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
-        app:layout_constraintEnd_toStartOf="@+id/distance"/>
+        app:layout_constraintTop_toBottomOf="@+id/trip_img" />
 
-    <TextView
-        android:id="@+id/distance"
+    <Button
+        android:id="@+id/b_startTrip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
-        android:text="10"
-        android:textColor="#00BCD4"
-        android:textSize="16sp"
+        android:backgroundTint="#00BCD4"
+        android:text="Start Trip"
+        app:layout_constraintBottom_toTopOf="@+id/b_TripGalery"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/trip_dsc" />
+
+    <Button
+        android:id="@+id/b_TripGalery"
+        android:layout_width="99dp"
+        android:layout_height="47dp"
+        android:backgroundTint="#00BCD4"
+        android:text="Galery"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/usertripsdone" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/b_startTrip" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
