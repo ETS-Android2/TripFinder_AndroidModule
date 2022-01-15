@@ -1,10 +1,13 @@
 package pt.ua.tripfinder_android;
 
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.app.Activity;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +37,15 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             textView = (TextView) v.findViewById(R.id.tripName);
             trip_descrp = (TextView) v.findViewById(R.id.trip_descrp);
             trip_image = (ImageView) v.findViewById(R.id.trip_image);
+
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "Element " + getAdapterPosition() + " clicked.");
+                    v.getContext().startActivity(new Intent(v.getContext(), TripInfo_Activity.class));
+
+                }
+            });
         }
 
         public TextView getTextView() {
