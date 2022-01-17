@@ -1,6 +1,7 @@
 package pt.ua.tripfinder_android;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.app.Activity;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.InputStream;
+import java.net.URL;
 
 /**
  * Provide views to RecyclerView with data from mDataSet.
@@ -94,6 +97,20 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         viewHolder.getTextView().setText(mDataSet[position]);
         viewHolder.getTrip_descrp().setText(trips_descrps[position]);
+        viewHolder.getTrip_image().setImageDrawable(LoadImageFromWebOperations("https://cdn.pixabay.com/photo/2017/09/26/15/30/portugal-2788980__340.jpg"));
+
+    }
+
+    public static Drawable LoadImageFromWebOperations(String url) {
+        try {
+            Log.d("msg", "Link!");
+            InputStream is = (InputStream) new URL(url).getContent();
+            Log.d("msgD", "drawable");
+            Drawable d = Drawable.createFromStream(is, "Moliceiro");
+            return d;
+        } catch (Exception e) {
+            return null;
+        }
     }
     // END_INCLUDE(recyclerViewOnBindViewHolder)
 
