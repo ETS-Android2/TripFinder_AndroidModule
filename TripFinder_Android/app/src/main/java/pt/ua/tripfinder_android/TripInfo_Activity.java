@@ -8,18 +8,28 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class TripInfo_Activity extends AppCompatActivity {
 
+    public static String tripId = "tripId";
+
     private BottomNavigationView navBar;
     private Button b_galery;
+    private TextView tripname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip_info);
+
+        Intent intent = getIntent();
+        tripId = intent.getStringExtra(CustomAdapter.ViewHolder.tripId);
+
+        tripname = findViewById(R.id.trip_name);
+        tripname.setText(tripId);
 
         navBar = findViewById(R.id.navBar);
         b_galery = findViewById(R.id.b_TripGalery);
@@ -30,7 +40,7 @@ public class TripInfo_Activity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), TripGalery_Activity.class));
+                startActivity(new Intent(getApplicationContext(), TripGalery_Activity.class).putExtra(tripId, tripId));
                 overridePendingTransition(0,0);
             }
         });

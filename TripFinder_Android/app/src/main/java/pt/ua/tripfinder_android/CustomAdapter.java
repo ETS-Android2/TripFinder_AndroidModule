@@ -29,6 +29,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         private final TextView textView;
         private final ImageView trip_image;
         private final TextView trip_descrp;
+        public static  final String tripId = "tripId";
 
         public ViewHolder(View v) {
             super(v);
@@ -42,7 +43,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "Element " + getAdapterPosition() + " clicked.");
-                    v.getContext().startActivity(new Intent(v.getContext(), TripInfo_Activity.class));
+                    v.getContext().startActivity(new Intent(v.getContext(), TripInfo_Activity.class).putExtra(tripId, textView.getText()));
 
                 }
             });
