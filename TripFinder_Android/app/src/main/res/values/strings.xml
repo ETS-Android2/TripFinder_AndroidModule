@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">TripFinder_Android</string>
+
+    <string-array name="cities">
+        <item>Aveiro</item>
+        <item>Porto</item>
+        <item>Viseu</item>
+        <item>Lisboa</item>
+        <item>Coimbra</item>
+    </string-array>
+
 </resources>
