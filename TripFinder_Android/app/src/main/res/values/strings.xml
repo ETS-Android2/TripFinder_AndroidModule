@@ -2,11 +2,11 @@
     <string name="app_name">TripFinder_Android</string>
 
     <string-array name="cities">
-        <item>Aveiro</item>
-        <item>Porto</item>
-        <item>Viseu</item>
-        <item>Lisboa</item>
-        <item>Coimbra</item>
+        <item><u>Aveiro</u></item>
+        <item><u>Porto</u></item>
+        <item><u>Viseu</u></item>
+        <item><u>Lisboa</u></item>
+        <item><u>Coimbra</u></item>
     </string-array>
     <string name="title_activity_map_page">map_page</string>
     <!-- Strings used for fragments for navigation -->

@@ -73,7 +73,7 @@
     <Spinner
         android:id="@+id/cities_spinner"
         android:layout_width="140dp"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:entries="@array/cities"
         app:layout_constraintBottom_toTopOf="@+id/trips"
         app:layout_constraintEnd_toEndOf="parent"
