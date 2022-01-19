@@ -17,7 +17,7 @@ public class TripInfo_Activity extends AppCompatActivity {
     public static String tripId = "tripId";
 
     private BottomNavigationView navBar;
-    private Button b_galery;
+    private Button b_galery,b_start;
     private TextView tripname;
 
     @Override
@@ -33,6 +33,7 @@ public class TripInfo_Activity extends AppCompatActivity {
 
         navBar = findViewById(R.id.navBar);
         b_galery = findViewById(R.id.b_TripGalery);
+        b_start = findViewById(R.id.b_startTrip);
 
         navBar.setSelectedItemId(R.id.home);
 
@@ -41,6 +42,15 @@ public class TripInfo_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), TripGalery_Activity.class).putExtra(tripId, tripId));
+                overridePendingTransition(0,0);
+            }
+        });
+
+        b_start.setOnClickListener(new Button.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), map_page.class));
                 overridePendingTransition(0,0);
             }
         });
