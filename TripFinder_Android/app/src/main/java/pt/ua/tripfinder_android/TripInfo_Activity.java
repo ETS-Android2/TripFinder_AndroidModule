@@ -2,9 +2,12 @@ package pt.ua.tripfinder_android;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class TripInfo_Activity extends AppCompatActivity {
 
     public static String tripId = "tripId";
+    private String trip_id;
 
     private BottomNavigationView navBar;
     private Button b_galery,b_start;
@@ -26,16 +30,20 @@ public class TripInfo_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_trip_info);
 
         Intent intent = getIntent();
-        tripId = intent.getStringExtra(CustomAdapter.ViewHolder.tripId);
+        trip_id = intent.getStringExtra(CustomAdapter.ViewHolder.tripId);
 
         tripname = findViewById(R.id.trip_name);
-        tripname.setText(tripId);
 
         navBar = findViewById(R.id.navBar);
         b_galery = findViewById(R.id.b_TripGalery);
         b_start = findViewById(R.id.b_startTrip);
 
         navBar.setSelectedItemId(R.id.home);
+
+        TripsViewModel mTripsViewModel = new ViewModelProvider(this).get(TripsViewModel.class);
+        mTripsViewModel.getTrip(trip_id).observe(this, trip -> {
+            tripname.setText(trip.getTitle());
+        });
 
         b_galery.setOnClickListener(new Button.OnClickListener(){
 

@@ -2,6 +2,7 @@ package pt.ua.tripfinder_android;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,40 +19,28 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String[] trips, trips_dsc;
-    private RecyclerView trip_rv;
-    private CustomAdapter adapter;
-    private BottomNavigationView navBar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        navBar = findViewById(R.id.navBar);
+        BottomNavigationView navBar = findViewById(R.id.navBar);
 
         navBar.setSelectedItemId(R.id.home);
 
-        trip_rv = findViewById(R.id.trips);
-
-        trips = new String[3];
-        trips_dsc = new String[3];
-
-
-        trips_dsc[0] = "teste 1";
-        trips_dsc[1] = "teste 2";
-        trips_dsc[2] = "teste 3";
-
-        trips[0] = "Ria de Aveiro";
-        trips[1] = "Salinas";
-        trips[2] = "Gastronomia";
-
         LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-        trip_rv.setLayoutManager(llm);
-        trip_rv.setItemAnimator(new DefaultItemAnimator());
-        adapter = new CustomAdapter(trips, trips_dsc);
-        trip_rv.setAdapter( adapter );
+
+        RecyclerView recyclerView = findViewById(R.id.trips);
+        recyclerView.setLayoutManager(llm);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        final TripListAdapter listAdapter = new TripListAdapter(new TripListAdapter.TripDiff());
+        recyclerView.setAdapter(listAdapter);
+
+        TripsViewModel mTripsViewModel = new ViewModelProvider(this).get(TripsViewModel.class);
+
+        // Update the cached copy of the words in the adapter.
+        mTripsViewModel.getAllTrips().observe(this, listAdapter::submitList);
 
         navBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -77,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Spinner spinner = (Spinner) findViewById(R.id.cities_spinner);
+        Spinner spinner = findViewById(R.id.cities_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.cities, R.layout.spinner_item);
