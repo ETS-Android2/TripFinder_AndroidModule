@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "583165105575",
+    "project_id": "cm-tripfinder",
+    "storage_bucket": "cm-tripfinder.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:583165105575:android:3d6fa1e7e7802c42f35282",
+        "android_client_info": {
+          "package_name": "com.example.tripfinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "583165105575-4r80fk7e5j3oet48vdtin5dkvo6h69m9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbasIIPhL6Zs4EMDZUuuuQkWrzbgX_8c8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "583165105575-4r80fk7e5j3oet48vdtin5dkvo6h69m9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:583165105575:android:03e9321f07f6a345f35282",
+        "android_client_info": {
+          "package_name": "pt.ua.tripfinder_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "583165105575-4r80fk7e5j3oet48vdtin5dkvo6h69m9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbasIIPhL6Zs4EMDZUuuuQkWrzbgX_8c8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "583165105575-4r80fk7e5j3oet48vdtin5dkvo6h69m9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
