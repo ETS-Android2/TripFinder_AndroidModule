@@ -6,14 +6,20 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.io.InputStream;
 
 public class TripInfo_Activity extends AppCompatActivity {
 
@@ -24,8 +30,9 @@ public class TripInfo_Activity extends AppCompatActivity {
     private String trip_id;
 
     private BottomNavigationView navBar;
+    private ImageView trip_img;
     private Button b_galery,b_start;
-    private TextView tripname;
+    private TextView tripname, trip_dsc;
     private double lat=0, lng=0;
 
     @Override
@@ -37,18 +44,24 @@ public class TripInfo_Activity extends AppCompatActivity {
         trip_id = intent.getStringExtra(CustomAdapter.ViewHolder.tripId);
 
         tripname = findViewById(R.id.trip_name);
+        trip_dsc = findViewById(R.id.trip_dsc);
 
         navBar = findViewById(R.id.navBar);
         b_galery = findViewById(R.id.b_TripGalery);
         b_start = findViewById(R.id.b_startTrip);
+
+        trip_img = findViewById(R.id.trip_img);
 
         navBar.setSelectedItemId(R.id.home);
 
         TripsViewModel mTripsViewModel = new ViewModelProvider(this).get(TripsViewModel.class);
         mTripsViewModel.getTrip(trip_id).observe(this, trip -> {
             tripname.setText(trip.getTitle());
+            trip_dsc.setText(trip.getContentFull());
             lat = trip.getLat();
             lng = trip.getLng();
+            new DownloadImageTask(trip_img)
+                    .execute(trip.getImageurl());
 
         });
 
@@ -100,5 +113,28 @@ public class TripInfo_Activity extends AppCompatActivity {
             }
         });
 
+    }
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
     }
 }

@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProvider;
+import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveCanceledListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener;
 
 import android.Manifest;
 import android.content.Context;
@@ -15,10 +17,11 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -26,21 +29,23 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import pt.ua.tripfinder_android.directionhelpers.FetchURL;
 import pt.ua.tripfinder_android.directionhelpers.TaskLoadedCallback;
 
-public class map_page extends AppCompatActivity implements OnMapReadyCallback, TaskLoadedCallback {
+public class map_page extends AppCompatActivity implements OnMapReadyCallback, TaskLoadedCallback, OnCameraMoveStartedListener,
+        OnCameraMoveListener,
+        OnCameraMoveCanceledListener,
+        OnCameraIdleListener{
     private GoogleMap mMap;
     private MarkerOptions place1, place2;
     FloatingActionButton curr_btn;
@@ -48,8 +53,17 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
     MapFragment mapFragment;
     FusedLocationProviderClient client;
 
+    private boolean locked = true;
+
+    private LocationListener locationListener;
+    private LocationManager locationManager;
+
+    private final long MIN_TIME = 500;
+    private final long MIN_DIST = 0;
+
     private String trip_name;
     private double lat,lng;
+    private Marker myMarker;
 
 
     @Override
@@ -70,16 +84,70 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
 
         client = LocationServices.getFusedLocationProviderClient(this);
 
-        getCurrentLocation();
-
-        curr_btn.setOnClickListener(v -> getCurrentLocation());
+        curr_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentLocation();
+                locked = true;
+            }
+        });
 
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        Log.d("mylog", "Added Markers");
+        LatLng dest = new LatLng(lat,lng);
+        place2 = new MarkerOptions().position(dest).title(trip_name);
+        mMap.addMarker(place2);
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(dest,15));
+        getCurrentLocation();
+
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
+                myMarker.setPosition(current);
+                if(locked){
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current,15));
+                }
+                new FetchURL(map_page.this).execute(getUrl(current, place2.getPosition(), "driving"), "driving");
+            }
+        };
+
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        try{
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DIST, locationListener);
+        }catch (SecurityException e){
+            e.printStackTrace();
+        }
+
+        mMap.setOnCameraIdleListener( this);
+        mMap.setOnCameraMoveStartedListener( this);
+        mMap.setOnCameraMoveListener(this);
+        mMap.setOnCameraMoveCanceledListener(this);
+    }
+
+    @Override
+    public void onCameraMoveStarted(int reason) {
+
+        if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
+            locked = false;
+        }
+    }
+    @Override
+    public void onCameraIdle() {
+
+    }
+
+    @Override
+    public void onCameraMoveCanceled() {
+
+    }
+
+    @Override
+    public void onCameraMove() {
+
     }
 
     private void getCurrentLocation() {
@@ -91,11 +159,8 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
                 if(location != null){
                     mapFragment.getMapAsync(googleMap -> {
                         LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
-                        LatLng dest = new LatLng(lat,lng);
                         place1 = new MarkerOptions().position(current).title("My Position").icon(bitmapFromVector(getApplicationContext(),R.drawable.car_icon));
-                        place2 = new MarkerOptions().position(dest).title(trip_name);
-                        googleMap.addMarker(place1);
-                        googleMap.addMarker(place2);
+                        myMarker = googleMap.addMarker(place1);
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current,15));
                         new FetchURL(map_page.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
                     });
@@ -103,6 +168,7 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
             });
         }else{
             ActivityCompat.requestPermissions(map_page.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
+            ActivityCompat.requestPermissions(map_page.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 44);
         }
     }
 
