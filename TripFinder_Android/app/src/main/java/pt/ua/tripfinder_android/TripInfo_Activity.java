@@ -18,11 +18,15 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class TripInfo_Activity extends AppCompatActivity {
 
     public static String tripId = "tripId";
+    public static String tripName = "tripName";
+    public static String tripLat = "tripLat";
+    public static String tripLng = "tripLng";
     private String trip_id;
 
     private BottomNavigationView navBar;
     private Button b_galery,b_start;
     private TextView tripname;
+    private double lat=0, lng=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,9 @@ public class TripInfo_Activity extends AppCompatActivity {
         TripsViewModel mTripsViewModel = new ViewModelProvider(this).get(TripsViewModel.class);
         mTripsViewModel.getTrip(trip_id).observe(this, trip -> {
             tripname.setText(trip.getTitle());
+            lat = trip.getLat();
+            lng = trip.getLng();
+
         });
 
         b_galery.setOnClickListener(new Button.OnClickListener(){
@@ -58,7 +65,11 @@ public class TripInfo_Activity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), map_page.class));
+                startActivity(new Intent(getApplicationContext(), map_page.class)
+                        .putExtra(tripName, tripname.getText())
+                        .putExtra(tripLat, lat)
+                        .putExtra(tripLng, lng)
+                );
                 overridePendingTransition(0,0);
             }
         });
