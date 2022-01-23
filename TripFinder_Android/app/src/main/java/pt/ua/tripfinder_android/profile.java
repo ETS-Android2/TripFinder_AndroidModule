@@ -14,7 +14,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class profile extends AppCompatActivity {
 
     private BottomNavigationView navBar;
-    private Button b_mytrips;
+    private Button b_mytrips, b_logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +23,7 @@ public class profile extends AppCompatActivity {
 
         navBar = findViewById(R.id.navBar);
         b_mytrips = findViewById(R.id.b_tripsmade);
+        b_logout = findViewById(R.id.b_logout) ;
 
         navBar.setSelectedItemId(R.id.profile);
 
@@ -31,6 +32,16 @@ public class profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), Mytrips_activity.class));
+                overridePendingTransition(0,0);
+            }
+
+        });
+
+        b_logout.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Login_activity.class));
                 overridePendingTransition(0,0);
             }
 
@@ -54,7 +65,6 @@ public class profile extends AppCompatActivity {
                         overridePendingTransition(0,0);
                         return true;
                 }
-
 
                 return false;
             }
