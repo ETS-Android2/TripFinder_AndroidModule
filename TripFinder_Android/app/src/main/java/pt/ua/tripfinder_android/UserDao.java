@@ -17,10 +17,7 @@ public interface UserDao {
     @Query("DELETE FROM user_table")
     void deleteAll();
 
-    @Query("SELECT name FROM user_table WHERE id = :id")
-    LiveData<String> getName(String id);
-
-    @Query("SELECT image_url FROM user_table WHERE id = :id")
-    LiveData<String> getImage_url(String id);
+    @Query("SELECT * FROM user_table WHERE id = :id")
+    LiveData<User> getUser(String id);
 
 }

@@ -2,6 +2,7 @@ package pt.ua.tripfinder_android;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,16 +19,19 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.InputStream;
 
 public class profile extends AppCompatActivity {
 
+    private FirebaseAuth mAuth;
+
     private BottomNavigationView navBar;
     private Button b_mytrips, b_logout;
     private TextView greeting, mail;
     private UserRepository userRepository;
-    private ImageButton user_image;
+    private ImageView user_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,15 +45,22 @@ public class profile extends AppCompatActivity {
         b_logout = findViewById(R.id.b_logout) ;
 
         greeting = findViewById(R.id.greeting);
-        String greet = "Olá, " + userRepository.getName(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).getValue();
-        greeting.setText(greet);
 
         mail = findViewById(R.id.mail);
         mail.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail().toString());
 
-        user_image = findViewById(R.id.imageButton);
-        new DownloadImageTask(user_image)
-                .execute(userRepository.getImage_url(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).getValue());
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user_logged = mAuth.getCurrentUser();
+
+        user_image = findViewById(R.id.image_user);
+        UserViewModel mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        mUserViewModel.getUser(user_logged.getUid()).observe(this, user -> {
+            greeting.setText("Olá " + user.getName());
+            Log.d("URL", user.getImage_url());
+            new DownloadImageTask(user_image)
+                    .execute(user.getImage_url());
+
+        });
 
         navBar.setSelectedItemId(R.id.profile);
 
@@ -99,8 +110,8 @@ public class profile extends AppCompatActivity {
     }
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageButton bmImage;
-        public DownloadImageTask(ImageButton bmImage) {
+        ImageView bmImage;
+        public DownloadImageTask(ImageView bmImage) {
             this.bmImage = bmImage;
         }
 

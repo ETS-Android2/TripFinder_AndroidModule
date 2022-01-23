@@ -19,11 +19,8 @@ public class UserRepository {
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.
 
-    LiveData<String> getName(String id){
-        return mUserDao.getName(id);
-    }
-    LiveData<String> getImage_url(String id){
-        return mUserDao.getImage_url(id);
+    LiveData<User> getUser(String id){
+        return mUserDao.getUser(id);
     }
 
     // You must call this on a non-UI thread or your app will throw an exception. Room ensures
