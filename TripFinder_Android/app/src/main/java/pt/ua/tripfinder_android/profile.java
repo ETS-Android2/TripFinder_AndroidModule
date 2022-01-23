@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class profile extends AppCompatActivity {
 
@@ -41,6 +42,7 @@ public class profile extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(getApplicationContext(), Login_activity.class));
                 overridePendingTransition(0,0);
             }
