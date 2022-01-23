@@ -69,7 +69,7 @@ public class TripInfo_Activity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), TripGalery_Activity.class).putExtra(tripId, tripId));
+                startActivity(new Intent(getApplicationContext(), TripGalery_Activity.class).putExtra(tripId, tripname.getText()));
                 overridePendingTransition(0,0);
             }
         });
