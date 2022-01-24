@@ -58,7 +58,7 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
     MapFragment mapFragment;
     FusedLocationProviderClient client;
 
-    private boolean locked = true;
+    private boolean locked = false;
 
     private LocationListener locationListener;
     private LocationManager locationManager;
@@ -95,7 +95,7 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
         curr_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getCurrentLocation();
+                moveCameraToCurr();
                 locked = true;
             }
         });
@@ -114,6 +114,10 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
         });
     }
 
+    private void moveCameraToCurr(){
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myMarker.getPosition(),15));
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
         super.onActivityResult(requestCode, resultCode, data);
@@ -129,8 +133,10 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
         LatLng dest = new LatLng(lat,lng);
         place2 = new MarkerOptions().position(dest).title(trip_name);
         mMap.addMarker(place2);
+        place1 = new MarkerOptions().position(dest).title("My Position").icon(bitmapFromVector(getApplicationContext(),R.drawable.car_icon));
+        myMarker = mMap.addMarker(place1);
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(dest,15));
-        getCurrentLocation();
+        getInitialPosition();
 
         locationListener = new LocationListener() {
             @Override
@@ -179,20 +185,16 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
 
     }
 
-    private void getCurrentLocation() {
+    private void getInitialPosition() {
         Task<Location> task;
         if (ActivityCompat.checkSelfPermission(map_page.this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             task = client.getLastLocation();
             task.addOnSuccessListener(location -> {
                 if(location != null){
-                    mapFragment.getMapAsync(googleMap -> {
-                        LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
-                        place1 = new MarkerOptions().position(current).title("My Position").icon(bitmapFromVector(getApplicationContext(),R.drawable.car_icon));
-                        myMarker = googleMap.addMarker(place1);
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current,15));
-                        new FetchURL(map_page.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
-                    });
+                    LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
+                    myMarker.setPosition(current);
+                    new FetchURL(map_page.this).execute(getUrl(current, place2.getPosition(), "driving"), "driving");
                 }
             });
         }else{
@@ -215,7 +217,7 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 44) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getCurrentLocation();
+                getInitialPosition();
             }
         }
 
