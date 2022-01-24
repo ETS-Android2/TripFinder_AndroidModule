@@ -1,6 +1,7 @@
 package pt.ua.tripfinder_android;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -10,6 +11,7 @@ import com.google.android.gms.maps.GoogleMap.OnCameraMoveListener;
 import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,8 +21,11 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ipsec.ike.exceptions.IkeNetworkLostException;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -48,7 +53,7 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
         OnCameraIdleListener{
     private GoogleMap mMap;
     private MarkerOptions place1, place2;
-    FloatingActionButton curr_btn;
+    FloatingActionButton curr_btn, cam_btn;
     private Polyline currentPolyline;
     MapFragment mapFragment;
     FusedLocationProviderClient client;
@@ -65,6 +70,7 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
     private double lat,lng;
     private Marker myMarker;
 
+    private ImageView picture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +83,8 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
 
         setContentView(R.layout.map_page);
         curr_btn = findViewById(R.id.curr_btn);
+        cam_btn = findViewById(R.id.cam_btn);
+        picture = findViewById(R.id.picture);
 
         mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
@@ -92,6 +100,27 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
             }
         });
 
+        if (ContextCompat.checkSelfPermission(map_page.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(map_page.this, new String[]{
+                    Manifest.permission.CAMERA
+            }, 100);
+        }
+        cam_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, 100);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100){
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            picture.setImageBitmap(bitmap);
+        }
     }
 
     @Override
@@ -189,6 +218,7 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
                 getCurrentLocation();
             }
         }
+
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
