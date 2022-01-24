@@ -53,7 +53,7 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
         OnCameraIdleListener{
     private GoogleMap mMap;
     private MarkerOptions place1, place2;
-    FloatingActionButton curr_btn, cam_btn;
+    FloatingActionButton curr_btn, cam_btn, done_btn;
     private Polyline currentPolyline;
     MapFragment mapFragment;
     FusedLocationProviderClient client;
@@ -84,6 +84,7 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
         setContentView(R.layout.map_page);
         curr_btn = findViewById(R.id.curr_btn);
         cam_btn = findViewById(R.id.cam_btn);
+        done_btn = findViewById(R.id.done_btn);
         picture = findViewById(R.id.picture);
 
         mapFragment = (MapFragment) getFragmentManager()
@@ -97,6 +98,15 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
             public void onClick(View v) {
                 moveCameraToCurr();
                 locked = true;
+            }
+        });
+
+        done_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                overridePendingTransition(0,0);
             }
         });
 
