@@ -29,7 +29,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/trips"
-            app:menu="@menu/menu_navigation" />
+            app:menu="@menu/menu_navigation" >
+
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
     </LinearLayout>
 
     <androidx.appcompat.widget.Toolbar
@@ -53,20 +55,9 @@
         android:text="Galery of"
         android:textColor="#000000"
         android:textSize="28sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toStartOf="@+id/tripgalery_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
-        android:layout_height="500dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"></LinearLayout>
 
     <TextView
         android:id="@+id/tripgalery_name"
@@ -77,9 +68,17 @@
         android:text="Ria de Aveiro"
         android:textColor="#00BCD4"
         android:textSize="28sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView6"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ImageGalery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tripgalery_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
