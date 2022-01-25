@@ -104,7 +104,7 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
         done_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 overridePendingTransition(0,0);
             }
