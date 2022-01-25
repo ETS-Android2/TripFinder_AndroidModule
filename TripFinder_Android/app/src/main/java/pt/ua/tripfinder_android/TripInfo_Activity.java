@@ -43,6 +43,19 @@ public class TripInfo_Activity extends AppCompatActivity {
         Intent intent = getIntent();
         trip_id = intent.getStringExtra(CustomAdapter.ViewHolder.tripId);
 
+        if (trip_id == "Ria de Aveiro"){
+            trip_id = "1";
+        }
+        if (trip_id == "Salinas"){
+            trip_id = "2";
+        }
+        if (trip_id == "Gastronomia"){
+            trip_id = "3";
+        }
+        if (trip_id == "Aliados"){
+            trip_id = "4";
+        }
+
         tripname = findViewById(R.id.trip_name);
         trip_dsc = findViewById(R.id.trip_dsc);
 

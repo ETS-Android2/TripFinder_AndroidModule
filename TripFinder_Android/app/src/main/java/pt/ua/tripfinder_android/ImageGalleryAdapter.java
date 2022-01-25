@@ -2,6 +2,7 @@ package pt.ua.tripfinder_android;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import com.bumptech.glide.Glide;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
@@ -30,8 +33,8 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final ImageView imageView;
-        public static  final String tripId = "tripId";
+        private ImageView imageView;
+        public static final String tripId = "tripId";
 
         public ViewHolder(View v) {
             super(v);
@@ -63,19 +66,22 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-//        try {
-//            Log.d("msg", "url:" + items.get(position).getDownloadUrl().toString());
-//            InputStream is = (InputStream) new URL(items.get(position).getDownloadUrl().toString()).getContent();
-//            Drawable d = Drawable.createFromStream(is, "image");
-//            holder.getImage().setImageDrawable(d);
 
-            Glide.with(holder.getImage().getContext() /* context */)
-                    .load(items.get(position).getDownloadUrl().toString())
-                    .into(holder.getImage());
+        items.get(position).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // Got the download URL for 'users/me/profile.png'
+                Glide.with(holder.getImage().getContext() /* context */)
+                        .load(uri.toString())
+                        .into(holder.getImage());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });
 
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     @Override

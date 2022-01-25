@@ -88,7 +88,7 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
         storage = FirebaseStorage.getInstance();
 
         Intent intent = getIntent();
-        trip_name = intent.getStringExtra(TripInfo_Activity.tripId);
+        trip_name = intent.getStringExtra(TripInfo_Activity.tripName);
         lat = intent.getDoubleExtra(TripInfo_Activity.tripLat,0);
         lng = intent.getDoubleExtra(TripInfo_Activity.tripLng,0);
 
