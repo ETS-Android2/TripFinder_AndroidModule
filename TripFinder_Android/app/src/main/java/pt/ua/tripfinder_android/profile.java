@@ -55,11 +55,20 @@ public class profile extends AppCompatActivity {
         user_image = findViewById(R.id.image_user);
         UserViewModel mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         mUserViewModel.getUser(user_logged.getUid()).observe(this, user -> {
-            greeting.setText("Olá " + user.getName());
-            Log.d("URL", user.getImage_url());
-            new DownloadImageTask(user_image)
-                    .execute(user.getImage_url());
-
+            if (user != null) {
+                if (!user.getName().isEmpty()) {
+                    greeting.setText("Olá " + user.getName() + "!");
+                } else {
+                    greeting.setText("Olá " + user_logged.getEmail() + "!");
+                }
+                if (!user.getImage_url().isEmpty()) {
+                    new DownloadImageTask(user_image)
+                            .execute(user.getImage_url());
+                }
+            }
+            else{
+                greeting.setText("Olá " + user_logged.getEmail() + "!");
+            }
         });
 
         navBar.setSelectedItemId(R.id.profile);

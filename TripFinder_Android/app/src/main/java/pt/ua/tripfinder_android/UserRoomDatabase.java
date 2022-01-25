@@ -35,4 +35,22 @@ public abstract class UserRoomDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
+    private static RoomDatabase.Callback sTripDatabaseCallback = new RoomDatabase.Callback() {
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+
+            // If you want to keep data through app restarts,
+            // comment out the following block
+            databaseWriteExecutor.execute(() -> {
+
+                UserDao dao = INSTANCE.userDao();
+                dao.deleteAll();
+
+                dao.insert(new User("72j7tVzUKedB5lFkU5jC2d37fKg1", "Admin", "https://cdn-icons-png.flaticon.com/512/146/146035.png"));
+
+            });
+        }
+    };
+
 }

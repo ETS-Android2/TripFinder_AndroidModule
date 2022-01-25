@@ -36,7 +36,12 @@ public class statistics extends AppCompatActivity {
 
         UserViewModel mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         mUserViewModel.getUser(user_logged.getUid()).observe(this, user -> {
-                    username.setText(user.getName());
+            if (user != null){
+                username.setText(user.getName());
+            }
+            else{
+                username.setText(user_logged.getEmail());
+            }
         });
 
         navBar.setSelectedItemId(R.id.stats);
