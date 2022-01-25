@@ -59,7 +59,10 @@ public class Register_activity extends AppCompatActivity {
                 String name_value = name.getText().toString();
                 String image_url_value = image_url.getText().toString();
 
-                if (mail_value != null && !mail_value.isEmpty() && pass_value != null && !pass_value.isEmpty() && !name_value.isEmpty() && !image_url_value.isEmpty()) {
+                if (mail_value != null && !mail_value.isEmpty() && pass_value != null && !pass_value.isEmpty() && !name_value.isEmpty()) {
+                    if (image_url_value.isEmpty()){
+                        image_url_value = " ";
+                    }
                     createAccount(mail_value, pass_value, name_value, image_url_value);
                 }
             }

@@ -128,8 +128,10 @@ public class profile extends AppCompatActivity {
             String urldisplay = urls[0];
             Bitmap mIcon11 = null;
             try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
+                if (urldisplay.length() > 4) {
+                    InputStream in = new java.net.URL(urldisplay).openStream();
+                    mIcon11 = BitmapFactory.decodeStream(in);
+                }
             } catch (Exception e) {
                 Log.e("Error", e.getMessage());
                 e.printStackTrace();

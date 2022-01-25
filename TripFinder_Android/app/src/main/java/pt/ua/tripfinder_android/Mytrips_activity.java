@@ -63,9 +63,10 @@ public class Mytrips_activity extends AppCompatActivity {
                         mDataSet[finalI] = "1";
                         trips_descrps[finalI] = "1";
                         mTripViewModel.getTrip(trip_id).observe(this, trip -> {
-
-                            this.name = trip.getTitle();
-                            this.description = trip.getContentShort();
+                            if (trip != null) {
+                                this.name = trip.getTitle();
+                                this.description = trip.getContentShort();
+                            }
                         });
 
                        mDataSet[finalI] = this.name;
