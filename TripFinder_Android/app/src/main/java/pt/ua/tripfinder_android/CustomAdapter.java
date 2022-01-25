@@ -42,14 +42,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             trip_descrp = (TextView) v.findViewById(R.id.trip_descrp);
             trip_image = (ImageView) v.findViewById(R.id.trip_image);
 
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(TAG, "Element " + getAdapterPosition() + " clicked.");
-                    v.getContext().startActivity(new Intent(v.getContext(), TripInfo_Activity.class).putExtra(tripId, textView.getText()));
-
-                }
-            });
+//            v.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Log.d(TAG, "Element " + getAdapterPosition() + " clicked.");
+//                    v.getContext().startActivity(new Intent(v.getContext(), TripInfo_Activity.class).putExtra(tripId, textView.getText()));
+//
+//                }
+//            });
         }
 
         public TextView getTextView() {
@@ -72,7 +72,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
      * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
      */
     public CustomAdapter(String[] dataSet, String[] trips_descrps) {
-        mDataSet = dataSet;
+        this.mDataSet = dataSet;
         this.trips_descrps = trips_descrps;
     }
 
@@ -97,7 +97,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         viewHolder.getTextView().setText(mDataSet[position]);
         viewHolder.getTrip_descrp().setText(trips_descrps[position]);
-        viewHolder.getTrip_image().setImageDrawable(LoadImageFromWebOperations("https://cdn.pixabay.com/photo/2017/09/26/15/30/portugal-2788980__340.jpg"));
+        //viewHolder.getTrip_image().setImageDrawable(LoadImageFromWebOperations("https://cdn.pixabay.com/photo/2017/09/26/15/30/portugal-2788980__340.jpg"));
 
     }
 

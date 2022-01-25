@@ -48,7 +48,7 @@ public abstract class UserRoomDatabase extends RoomDatabase {
                 UserDao dao = INSTANCE.userDao();
                 dao.deleteAll();
 
-                dao.insert(new User("72j7tVzUKedB5lFkU5jC2d37fKg1", "Admin", "https://cdn-icons-png.flaticon.com/512/146/146035.png"));
+                dao.insert(new User("72j7tVzUKedB5lFkU5jC2d37fKg1", "Admin", "https://cdn-icons-png.flaticon.com/512/146/146035.png", "1,2"));
 
             });
         }

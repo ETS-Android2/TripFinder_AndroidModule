@@ -2,22 +2,29 @@ package pt.ua.tripfinder_android;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Mytrips_activity extends AppCompatActivity {
 
     private BottomNavigationView navBar;
     private RecyclerView mytrip_rv;
-    private String[] trips, trips_dsc;
     private CustomAdapter adapter;
+    private UserRepository userRepository;
+    private String name;
+    private String description;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,23 +33,53 @@ public class Mytrips_activity extends AppCompatActivity {
 
         mytrip_rv = findViewById(R.id.mytrips_rv);
 
-        trips = new String[2];
-        trips_dsc = new String[2];
+        this.name = "";
+        this.description = "";
 
+        userRepository = new UserRepository(getApplication());
 
-        trips_dsc[0] = "teste 1";
-        trips_dsc[1] = "teste 2";
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user_logged = mAuth.getCurrentUser();
 
-        trips[0] = "Ria de Aveiro";
-        trips[1] = "Gastronomia";
+//        User user = userRepository.getUser(user_logged.getUid()).getValue();
 
-        LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        mytrip_rv.setLayoutManager(llm);
-        mytrip_rv.setItemAnimator(new DefaultItemAnimator());
-        adapter = new CustomAdapter(trips, trips_dsc);
-        mytrip_rv.setAdapter( adapter );
+        UserViewModel mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        mUserViewModel.getUser(user_logged.getUid()).observe(this, user -> {
+                    String[] trips;
 
+                    if (user != null) {
+                        trips = user.getTrip_ids().split(",");
+                    } else {
+                        trips = new String[0];
+                    }
+
+                    String[] mDataSet = new String[trips.length];
+                    String[] trips_descrps = new String[trips.length];
+
+                    int i = 0;
+                    for (String trip_id : trips) {
+                        TripsViewModel mTripViewModel = new ViewModelProvider(this).get(TripsViewModel.class);
+                        int finalI = i;
+                        mDataSet[finalI] = "1";
+                        trips_descrps[finalI] = "1";
+                        mTripViewModel.getTrip(trip_id).observe(this, trip -> {
+
+                            this.name = trip.getTitle();
+                            this.description = trip.getContentShort();
+                        });
+
+                       mDataSet[finalI] = this.name;
+                       trips_descrps[finalI] = this.description;
+                       i++;
+                    }
+
+                    LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
+                    llm.setOrientation(LinearLayoutManager.VERTICAL);
+                    mytrip_rv.setLayoutManager(llm);
+                    mytrip_rv.setItemAnimator(new DefaultItemAnimator());
+                    adapter = new CustomAdapter(mDataSet, trips_descrps);
+                    mytrip_rv.setAdapter(adapter);
+        });
         navBar = findViewById(R.id.navBar);
         navBar.setSelectedItemId(R.id.profile);
 

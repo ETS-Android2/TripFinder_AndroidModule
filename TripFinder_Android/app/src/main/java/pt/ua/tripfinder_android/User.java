@@ -18,10 +18,14 @@ public class User {
     @ColumnInfo(name = "image_url")
     private final String image_url;
 
-    public User(String id, String name, String image_url) {
+    @ColumnInfo(name = "trips")
+    private final String trip_ids;
+
+    public User(String id, String name, String image_url, String trip_ids) {
         this.id = id;
         this.name = name;
         this.image_url = image_url;
+        this.trip_ids = trip_ids;
     }
 
     public String getId() {
@@ -34,5 +38,9 @@ public class User {
 
     public String getName() {
         return name;
+    }
+
+    public String getTrip_ids(){
+        return trip_ids;
     }
 }
