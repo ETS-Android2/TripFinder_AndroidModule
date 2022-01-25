@@ -78,7 +78,6 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
     private double lat,lng;
     private Marker myMarker;
 
-    private ImageView picture;
     private FirebaseStorage storage;
 
     @Override
@@ -96,7 +95,6 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
         curr_btn = findViewById(R.id.curr_btn);
         cam_btn = findViewById(R.id.cam_btn);
         done_btn = findViewById(R.id.done_btn);
-        picture = findViewById(R.id.picture);
 
         mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
