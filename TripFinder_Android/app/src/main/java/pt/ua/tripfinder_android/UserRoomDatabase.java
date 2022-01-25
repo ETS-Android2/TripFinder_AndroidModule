@@ -28,6 +28,7 @@ public abstract class UserRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             UserRoomDatabase.class, "user_database")
+                            .addCallback(sUserDatabaseCallback)
                             .build();
                 }
             }
@@ -35,7 +36,7 @@ public abstract class UserRoomDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    private static RoomDatabase.Callback sTripDatabaseCallback = new RoomDatabase.Callback() {
+    private static RoomDatabase.Callback sUserDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
