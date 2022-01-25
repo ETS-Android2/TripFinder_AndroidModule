@@ -62,7 +62,7 @@ public abstract class TripRoomDatabase extends RoomDatabase {
 
                 lTrips.add(new Trips(2, 10, "Salinas",
                                 "Visita ás Salinas de Aveiro",
-                                "content2",
+                                "Passeio pela Rua da pego ao longo da Ria, a culminar com a visita ás belas salinas de Aveiro.",
                                 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Aveiro-Marais_salants-1967_07_29_29.jpg/1200px-Aveiro-Marais_salants-1967_07_29_29.jpg",
                                 "Aveiro",
                                 40.644699,
@@ -70,7 +70,7 @@ public abstract class TripRoomDatabase extends RoomDatabase {
                         ));
                 lTrips.add(new Trips(3, 20, "Gastronomia",
                                 "Visita ás melhores ofertas gastronómicas de Aveiro",
-                                "content3",
+                                "Visita ás melhores ofertas gastronómicas de Aveiro, onde puderá provar doçaria típica Aveirense entre muitos outros pratos típicos da região",
                                 "https://media-cdn.tripadvisor.com/media/photo-s/0d/43/90/9b/polvo-a-lagareiro.jpg",
                                 "Aveiro",
                                 40.635749,

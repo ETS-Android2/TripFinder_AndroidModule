@@ -41,8 +41,16 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
+import java.util.Random;
 
 import pt.ua.tripfinder_android.directionhelpers.FetchURL;
 import pt.ua.tripfinder_android.directionhelpers.TaskLoadedCallback;
@@ -71,13 +79,16 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
     private Marker myMarker;
 
     private ImageView picture;
+    private FirebaseStorage storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        storage = FirebaseStorage.getInstance();
+
         Intent intent = getIntent();
-        trip_name = intent.getStringExtra(TripInfo_Activity.tripId);
+        trip_name = intent.getStringExtra(TripInfo_Activity.tripName);
         lat = intent.getDoubleExtra(TripInfo_Activity.tripLat,0);
         lng = intent.getDoubleExtra(TripInfo_Activity.tripLng,0);
 
@@ -124,17 +135,52 @@ public class map_page extends AppCompatActivity implements OnMapReadyCallback, T
         });
     }
 
-    private void moveCameraToCurr(){
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myMarker.getPosition(),15));
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100){
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            picture.setImageBitmap(bitmap);
+
+            Random rand = new Random();
+
+            // Generate random integers in range 0 to 999
+            int rand_int1 = rand.nextInt(10000);
+            String generatedString = trip_name + "_" + rand_int1;
+
+            StorageReference storageRef = storage.getReference();
+
+            StorageReference newfileRef = storageRef.child(generatedString+".jpg");
+
+            StorageReference newFileTripRef = storageRef.child(trip_name + "/" + generatedString + ".jpg");
+
+            // While the file names are the same, the references point to different files
+            newfileRef.getName().equals(newFileTripRef.getName());    // true
+            newfileRef.getPath().equals(newFileTripRef.getPath());
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] databyte = baos.toByteArray();
+
+            UploadTask uploadTask = newFileTripRef.putBytes(databyte);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Toast.makeText(map_page.this, "Image not saved to Trip gallery",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(map_page.this, "Image saved to Trip gallery",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+
         }
+    }
+
+    private void moveCameraToCurr(){
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myMarker.getPosition(),15));
     }
 
     @Override

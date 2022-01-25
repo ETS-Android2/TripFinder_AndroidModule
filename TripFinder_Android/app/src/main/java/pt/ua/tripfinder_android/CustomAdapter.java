@@ -32,7 +32,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         private final TextView textView;
         private final ImageView trip_image;
         private final TextView trip_descrp;
-        public static  final String tripId = "tripId";
+        public static String tripId = "tripId";
 
         public ViewHolder(View v) {
             super(v);
